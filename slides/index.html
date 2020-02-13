@@ -1,0 +1,416 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+		<title>reveal.js</title>
+
+		<link rel="stylesheet" href="css/reveal.css">
+		<link rel="stylesheet" href="css/theme/blood.css">
+
+		<!-- Theme used for syntax highlighting of code -->
+		<link rel="stylesheet" href="lib/css/zenburn.css">
+
+		<style>
+
+		.highlight {
+			color:#a23;
+		}
+
+		.left {
+		  left:-8.33%;
+		  text-align: left;
+		  float: left;
+		  width:50%;
+		  z-index:-10;
+		}
+
+		.right {
+		  left:31.25%;
+		  top: 75px;
+		  float: right;
+		  text-align: left;
+		  z-index:-10;
+		  width:50%;
+		}
+
+		</style>
+
+		<!-- Printing and PDF exports -->
+		<script>
+			var link = document.createElement( 'link' );
+			link.rel = 'stylesheet';
+			link.type = 'text/css';
+			link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
+			document.getElementsByTagName( 'head' )[0].appendChild( link );
+		</script>
+	</head>
+	<body>
+		<div class="reveal">
+			<div class="slides">
+				<section>
+					<h3>From <span style="font-size: 20%">micro</span> to <span style="font-size: 250%">macro</span></h3>
+					<h3>Benchmarks</h3>
+					<br>
+					<p>
+						<small>Denis Rosa <br/><a href="https://twitter.com/deniswsrosa">@deniswsrosa</a><br></small>
+					</p>
+					<p>
+						<small><a href="https://couchbase.com"><strong >Couchbase.com</strong></a></small>
+					</p>
+
+				</section>
+				<section>
+					<h3>About <span class="highlight">@deniswsrosa</span></h3>
+					<div class="left">
+						<img src="snow.jpg" height="500px"/>
+					</div>
+					<div class="right">
+						<br/><br/><br/>
+						<small>
+							<ul>
+								<li>Developer Advocate at Couchbase</li>
+								<li>+15 years as a Developer</li>
+								<li>Open Source Contributor</li>
+							</ul>
+						</small>
+					</div>
+				</section>
+				<section>
+					<iframe src="http://showfast.sc.couchbase.com/#/timeline/Linux/kv/max_ops/all"  style="min-height: 1200px" width="100%">
+					</iframe>
+				</section>
+				<section>
+					<h2>Questions?</h2>
+				</section>
+				<section>
+					<h2>Benchmark Flavors</h2>
+					<br>
+					<ul>
+						<li><p><strong class="highlight">Casual:</strong> You just need to know which code runs faster (milliseconds)</p></li>
+						<li><p><strong class="highlight">Precise:</strong> Performance is key for you (ns or μs)</p></li>
+					</ul>
+				</section>
+
+				<section>
+					<h3>Java Microbenchmark Harness (JEP 230)</h3>
+					<small>A toolkit that helps you implement Java microbenchmarks correctly.</small>
+				</section>
+
+				<section>
+					<h3>It was added on <strong class="highlight">JDK 12</strong> but can be used with earlier versions</h3>
+				</section>
+
+				<section>
+					<h3>Let's rewrite our benchmark.</h3>
+				</section>
+
+
+				<section>
+					<small>JDK 8 - Complete Output:</small>
+					<pre ><code data-trim data-noescape>
+
+						# Warmup: 5 iterations, 10 s each
+						# Measurement: 5 iterations, 10 s each
+						# Timeout: 10 min per iteration
+						# Threads: 1 thread, will synchronize iterations
+						# Benchmark mode: Average time, time/op
+						# Benchmark: com.denix.sample.Demo2.stringBufferBenchmark
+
+						# Run progress: 0.00% complete, ETA 00:03:20
+						# Fork: 1 of 1
+						# Warmup Iteration   1:
+						 iterations counter: 518628
+						19.284 us/op
+						# Warmup Iteration   2:
+						 iterations counter: 601120
+						16.640 us/op
+						# Warmup Iteration   3:
+						 iterations counter: 601679
+						16.638 us/op
+						# Warmup Iteration   4:
+						 iterations counter: 449261
+						22.265 us/op
+						# Warmup Iteration   5:
+						 iterations counter: 639827
+						15.635 us/op
+						Iteration   1:
+						 iterations counter: 602167
+						16.614 us/op
+						Iteration   2:
+						 iterations counter: 661865
+						15.117 us/op
+						Iteration   3:
+						 iterations counter: 683740
+						14.628 us/op
+						Iteration   4:
+						 iterations counter: 704184
+						14.208 us/op
+						Iteration   5:
+						 iterations counter: 661811
+						15.111 us/op
+
+
+						Result "com.denix.sample.Demo2.stringBufferBenchmark":
+						  15.135 ±(99.9%) 3.501 us/op [Average]
+						  (min, avg, max) = (14.208, 15.135, 16.614), stdev = 0.909
+						  CI (99.9%): [11.635, 18.636] (assumes normal distribution)
+
+
+						# JMH version: 1.23
+						# VM version: JDK 1.8.0_152, Java HotSpot(TM) 64-Bit Server VM, 25.152-b16
+						# VM invoker: /Library/Java/JavaVirtualMachines/jdk1.8.0_152.jdk/Contents/Home/jre/bin/java
+						# VM options: -javaagent:/Applications/IntelliJ IDEA.app/Contents/lib/idea_rt.jar=52564:/Applications/IntelliJ IDEA.app/Contents/bin -Dfile.encoding=UTF-8
+						# Warmup: 5 iterations, 10 s each
+						# Measurement: 5 iterations, 10 s each
+						# Timeout: 10 min per iteration
+						# Threads: 1 thread, will synchronize iterations
+						# Benchmark mode: Average time, time/op
+						# Benchmark: com.denix.sample.Demo2.stringBuilderBenchmark
+
+						# Run progress: 50.00% complete, ETA 00:01:40
+						# Fork: 1 of 1
+						# Warmup Iteration   1:
+						 iterations counter: 755289
+						13.246 us/op
+						# Warmup Iteration   2:
+						 iterations counter: 719304
+						13.908 us/op
+						# Warmup Iteration   3:
+						 iterations counter: 801560
+						12.482 us/op
+						# Warmup Iteration   4:
+						 iterations counter: 796867
+						12.552 us/op
+						# Warmup Iteration   5:
+						 iterations counter: 796136
+						12.561 us/op
+						Iteration   1:
+						 iterations counter: 797661
+						12.542 us/op
+						Iteration   2:
+						 iterations counter: 800362
+						12.495 us/op
+						Iteration   3:
+						 iterations counter: 795824
+						12.571 us/op
+						Iteration   4:
+						 iterations counter: 775019
+						12.906 us/op
+						Iteration   5:
+						 iterations counter: 734521
+						13.618 us/op
+
+
+						Result "com.denix.sample.Demo2.stringBuilderBenchmark":
+						  12.826 ±(99.9%) 1.815 us/op [Average]
+						  (min, avg, max) = (12.495, 12.826, 13.618), stdev = 0.471
+						  CI (99.9%): [11.012, 14.641] (assumes normal distribution)
+
+
+						# Run complete. Total time: 00:03:21
+
+						REMEMBER: The numbers below are just data. To gain reusable insights, you need to follow up on
+						why the numbers are the way they are. Use profilers (see -prof, -lprof), design factorial
+						experiments, perform baseline and negative tests that provide experimental control, make sure
+						the benchmarking environment is safe on JVM/OS/HW level, ask for reviews from the domain experts.
+						Do not assume the numbers tell you what you want them to tell.
+
+						Benchmark                     Mode  Cnt   Score   Error  Units
+						Demo2.stringBufferBenchmark   avgt    5  15.135 ± 3.501  us/op
+						Demo2.stringBuilderBenchmark  avgt    5  12.826 ± 1.815  us/op
+
+					</code></pre>
+				</section>
+
+				<section>
+					<h3>But... Why do we need a framework for that?</h3>
+				</section>
+				<section>
+					<h3>There are a number of things that could influence your perf test</h3>
+				</section>
+
+
+				<section>
+					<h3>On JVM:</h3>
+					<ul>
+						<li><p><strong class="highlight">JVM Parameters:</strong></p></li>
+						<li><strong class="highlight">JIT</strong></li>
+						<li><strong class="highlight">Garbage Collection</strong></li>
+					</ul>
+				</section>
+
+				<section>
+					<h3>HotSpot JIT</h3>
+					<img src="java-compilation.png">
+					<small><span class="highlight"><strong>Source:</strong> https://youtu.be/6ICU2xo427M?t=510</span></small>
+				</section>
+
+				<section>
+					<h3>HotSpot Tiered Compilation</h3>
+					<img src="jit-speed.png">
+				</section>
+
+				<section>
+					<h3>-XX:+PrintCompilation</h3>
+					<ul>
+						<li><strong class="highlight">0 - </strong>interpreter (CompLevel_none)</li>
+						<li><strong class="highlight">1 - </strong>pure C1 (CompLevel_simple)</li>
+						<li><strong class="highlight">2 - </strong>C1 with invocation and backedge counting (CompLevel_limited_profile)</li>
+						<li><strong class="highlight">3 - </strong>C1 with full profiling (CompLevel_full_profile)</li>
+						<li><strong class="highlight">4 - </strong>C2 (CompLevel_full_optimization)</li>
+					</ul>
+				</section>
+
+				<section>
+					<h3>GraalVM</h3>
+					<img src="graalvm.png">
+					<small style="font-size:50%"><span><strong>Source:</strong> https://medium.com/graalvm/stream-api-performance-with-graalvm-be6cfe7fbb52</span></small>
+				</section>
+
+				<section>
+					<h3>Running our Benchmark with GraalVM</h3>
+				</section>
+
+				<section>
+					<pre><code data-trim data-noescape>
+						Demo2.stringBufferBenchmark   avgt    2  10.307          us/op
+						Demo2.stringBuilderBenchmark  avgt    2   8.978          us/op
+					</code></pre>
+				</section>
+
+				<section>
+					<h3>Garbage Collection</h3>
+					<img src="gcgraph.png"><br>
+					<small>Modern GC pauses are ~10ms to ~100ms</small>
+				</section>
+
+				<section>
+					<h3>Playing with GC and Profilers</h3>
+				</section>
+
+				<section>
+					<h3>Bandwidth vs Latency</h3>
+					<img width="70%" src="bandwidth.png"><br>
+					<small style="font-size:40%"><span><strong>Source:</strong> https://nwcpp.org/talks/2007/Machine_Architecture_-_NWCPP.pdf</span></small>
+				</section>
+
+				<section>
+					<h4>Memory Latency - i7 Xeon 5500:</h4>
+					<ul>
+						<li><strong class="highlight">L1:</strong> 1.2ns - 2.1ns</li>
+						<li><strong class="highlight">L2:</strong> 3.0ns - 5.3ns</li>
+						<li><strong class="highlight">L3, line unshared:</strong> 12.0ns - 21ns</li>
+						<li><strong class="highlight">L3, shared line:</strong> 19.5ns - 34.8ns</li>
+						<li><strong class="highlight">Local DRAM:</strong> >60ns</li>
+						<li><strong class="highlight">Remote DRAM:</strong> >150ns</li>
+					</ul>
+					<br><br><br>
+					<small style="font-size:40%"><span><strong>Source:</strong> https://stackoverflow.com/questions/4087280/approximate-cost-to-access-various-caches-and-main-memory</span></small>
+				</section>
+
+				<section>
+					<h3>Memory and Latency</h3>
+					<img width="70%" src="processor1.png"/><br>
+					<small style="font-size:40%"><span><strong>Source:</strong> https://nwcpp.org/talks/2007/Machine_Architecture_-_NWCPP.pdf</span></small>
+				</section>
+
+				<section>
+					<h3>Memory and Latency</h3>
+					<img src="processador2.jpg"/><br>
+				</section>
+
+				<section>
+					<h3>Temporal and Spatial Locality</h3>
+				</section>
+
+				<section>
+					<h4>JVM Optimizations</h4>
+					<ul>
+						<li>Dead code elimination</li>
+						<li>Constant-folding</li>
+						<li>Inlining</li>
+						<li>Code motion</li>
+						<li>Duplicate code elimination</li>
+						<li>Loop Unrolling</li>
+						<li><strong class="highlight">Remote DRAM:</strong> >150ns</li>
+					</ul>
+				</section>
+
+				<section>
+					<h3>Macro Benchmarks</h3>
+				</section>
+
+				<section>
+					<h3>Constant-Folding</h3>
+					<pre><code data-trim data-noescape>
+						@State(Scope.Thread)
+						@BenchmarkMode(Mode.AverageTime)
+						@OutputTimeUnit(TimeUnit.NANOSECONDS)
+						public class ConstantFoldExample {
+
+							private double x = Math.PI;
+							private final double wrongX = Math.PI;
+
+							@Benchmark
+							public double wrongMeasure1() {
+								//Result is predictable
+								return Math.log(Math.PI);
+							}
+
+							@Benchmark
+							public double wrongMeasure2() {
+								//Result is predictable as wrongx is final
+								return Math.log(wrongX);
+							}
+
+							@Benchmark
+							public double correctMeasure() {
+								//Correct
+								return Math.log(x);
+							}
+						}
+					</code></pre>
+				</section>
+
+
+
+				<section>
+					<h3>Further reading</h3>
+					<ul>
+						<li><strong>Bleve:</strong> blevesearch.com</li>
+						<li>Relevant Search: With Applications for Solr and Elasticsearch</li>
+						<li>Taming Text: How to Find, Organise, and Manipulate it</li>
+						<li>Solr in Action</li>
+						<li>https://gist.github.com/chrisvest/2932907</li>
+						<li><a href="https://www.slideshare.net/CharlesNutter/redev-2011-jvm-jit-for-dummies-what-the-jvm-does-with-your-bytecode-when-youre-not-looking">https://www.slideshare.net/CharlesNutter/redev-2011-jvm-jit-for-dummies-what-the-jvm-does-with-your-bytecode-when-youre-not-looking</a></li>
+					</ul>
+				</section>
+				<section>
+					<h1>Thank You</h1>
+					<br/>
+					<strong>@deniswsrosa</strong>
+				</section>
+			</div>
+		</div>
+
+		<script src="lib/js/head.min.js"></script>
+		<script src="js/reveal.js"></script>
+
+		<script>
+			// More info about config & dependencies:
+			// - https://github.com/hakimel/reveal.js#configuration
+			// - https://github.com/hakimel/reveal.js#dependencies
+			Reveal.initialize({
+				dependencies: [
+					{ src: 'plugin/markdown/marked.js' },
+					{ src: 'plugin/markdown/markdown.js' },
+					{ src: 'plugin/notes/notes.js', async: true },
+					{ src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } }
+				],
+				transition: "convex"
+			});
+		</script>
+	</body>
+</html>
